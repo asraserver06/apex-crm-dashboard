@@ -15,6 +15,7 @@ import {
   Tooltip,
   Modal,
   notification,
+  Tag,
 } from 'antd';
 import {
   DashboardOutlined,
@@ -29,7 +30,7 @@ import {
   LogoutOutlined,
   BellOutlined,
   SearchOutlined,
-  RocketOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../app/store';
 import { toggleSider, toggleTheme } from './uiSlice';
@@ -52,27 +53,27 @@ export const DashboardLayout: React.FC = () => {
   const menuItems = [
     {
       key: '/dashboard',
-      icon: <DashboardOutlined />,
+      icon: <DashboardOutlined style={{ fontSize: 18 }} />,
       label: 'Dashboard',
     },
     {
       key: '/customers',
-      icon: <UserOutlined />,
+      icon: <UserOutlined style={{ fontSize: 18 }} />,
       label: 'Customers',
     },
     {
       key: '/deals',
-      icon: <DollarOutlined />,
+      icon: <DollarOutlined style={{ fontSize: 18 }} />,
       label: 'Deals Pipeline',
     },
     {
       key: '/analytics',
-      icon: <BarChartOutlined />,
+      icon: <BarChartOutlined style={{ fontSize: 18 }} />,
       label: 'Analytics',
     },
     {
       key: '/settings',
-      icon: <SettingOutlined />,
+      icon: <SettingOutlined style={{ fontSize: 18 }} />,
       label: 'Settings',
     },
   ];
@@ -83,7 +84,7 @@ export const DashboardLayout: React.FC = () => {
 
   const handleLogout = () => {
     Modal.confirm({
-      title: 'Log out of CRM Admin?',
+      title: 'Log out of Apex CRM?',
       content: 'Are you sure you want to log out of your session?',
       okText: 'Logout',
       okType: 'danger',
@@ -105,12 +106,12 @@ export const DashboardLayout: React.FC = () => {
       key: 'profile-info',
       disabled: true,
       label: (
-        <div style={{ padding: '4px 0' }}>
-          <Text strong style={{ display: 'block' }}>
-            {user?.name || 'Admin User'}
+        <div style={{ padding: '6px 4px' }}>
+          <Text strong style={{ display: 'block', fontSize: 14 }}>
+            {user?.name || 'Alex Mercer'}
           </Text>
           <Text type="secondary" style={{ fontSize: 12 }}>
-            {user?.email || 'admin@apexcorp.com'}
+            {user?.email || 'alex.mercer@apexcorp.com'}
           </Text>
         </div>
       ),
@@ -119,14 +120,14 @@ export const DashboardLayout: React.FC = () => {
     {
       key: 'settings',
       icon: <SettingOutlined />,
-      label: 'Account Settings',
+      label: 'Account Preferences',
       onClick: () => navigate('/settings'),
     },
     {
       key: 'logout',
       icon: <LogoutOutlined />,
       danger: true,
-      label: 'Log out',
+      label: 'Sign out',
       onClick: handleLogout,
     },
   ];
@@ -137,12 +138,12 @@ export const DashboardLayout: React.FC = () => {
         algorithm: isDark ? antTheme.darkAlgorithm : antTheme.defaultAlgorithm,
         token: {
           colorPrimary: primaryColor,
-          borderRadius: 8,
-          fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          borderRadius: 10,
+          fontFamily: "'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif",
         },
       }}
     >
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: '100vh', background: isDark ? '#090d16' : '#f8fafc' }}>
         <Sider
           trigger={null}
           collapsible
@@ -154,21 +155,22 @@ export const DashboardLayout: React.FC = () => {
             }
           }}
           style={{
-            background: isDark ? '#141414' : '#001529',
-            boxShadow: '2px 0 8px rgba(0, 0, 0, 0.15)',
+            background: isDark ? '#0f172a' : '#0f172a',
+            borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+            boxShadow: '4px 0 24px rgba(0, 0, 0, 0.25)',
             zIndex: 10,
           }}
-          width={240}
+          width={250}
         >
           {/* Logo Brand Header */}
           <div
             style={{
-              height: 64,
+              height: 70,
               display: 'flex',
               alignItems: 'center',
               justifyContent: siderCollapsed ? 'center' : 'flex-start',
               padding: siderCollapsed ? '0' : '0 20px',
-              borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(255, 255, 255, 0.12)',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
               gap: 12,
               cursor: 'pointer',
             }}
@@ -176,38 +178,46 @@ export const DashboardLayout: React.FC = () => {
           >
             <div
               style={{
-                width: 36,
-                height: 36,
-                borderRadius: 10,
-                background: 'linear-gradient(135deg, #1677ff 0%, #722ed1 100%)',
+                width: 40,
+                height: 40,
+                borderRadius: 12,
+                background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#fff',
-                fontSize: 20,
-                fontWeight: 700,
-                boxShadow: '0 4px 10px rgba(114, 46, 209, 0.4)',
+                fontSize: 22,
+                boxShadow: '0 0 20px rgba(99, 102, 241, 0.6)',
               }}
             >
-              <RocketOutlined />
+              <ThunderboltOutlined />
             </div>
             {!siderCollapsed && (
               <div>
                 <Text
                   style={{
                     color: '#fff',
-                    fontWeight: 700,
-                    fontSize: 16,
-                    letterSpacing: '0.5px',
+                    fontWeight: 800,
+                    fontSize: 17,
+                    letterSpacing: '-0.3px',
                     display: 'block',
                     lineHeight: 1.2,
                   }}
                 >
                   APEX CRM
                 </Text>
-                <Text style={{ color: 'rgba(255, 255, 255, 0.45)', fontSize: 10 }}>
-                  ENTERPRISE v2.4
-                </Text>
+                <Tag
+                  color="purple"
+                  style={{
+                    fontSize: 9,
+                    fontWeight: 700,
+                    margin: 0,
+                    borderRadius: 4,
+                    padding: '0 4px',
+                  }}
+                >
+                  PRO ENTERPRISE
+                </Tag>
               </div>
             )}
           </div>
@@ -220,27 +230,30 @@ export const DashboardLayout: React.FC = () => {
             items={menuItems}
             onClick={handleMenuClick}
             style={{
-              paddingTop: 12,
+              paddingTop: 16,
               background: 'transparent',
               borderRight: 0,
             }}
           />
         </Sider>
 
-        <Layout>
+        <Layout style={{ background: 'transparent' }}>
           {/* Main Top Header */}
           <Header
             style={{
-              padding: '0 24px',
-              background: isDark ? '#1f1f1f' : '#ffffff',
+              padding: '0 28px',
+              background: isDark ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.85)',
+              backdropFilter: 'blur(16px)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              boxShadow: isDark
-                ? '0 1px 4px rgba(0, 0, 0, 0.5)'
-                : '0 1px 4px rgba(0, 21, 41, 0.08)',
+              borderBottom: isDark
+                ? '1px solid rgba(255, 255, 255, 0.08)'
+                : '1px solid rgba(226, 232, 240, 0.8)',
               zIndex: 9,
-              height: 64,
+              height: 70,
+              position: 'sticky',
+              top: 0,
             }}
           >
             <Space size={16}>
@@ -248,46 +261,68 @@ export const DashboardLayout: React.FC = () => {
                 type="text"
                 icon={siderCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                 onClick={() => dispatch(toggleSider())}
-                style={{ fontSize: 16 }}
+                style={{ fontSize: 18 }}
               />
               <Input
-                prefix={<SearchOutlined style={{ color: 'rgba(0,0,0,0.45)' }} />}
-                placeholder="Search deals, customers..."
-                style={{ width: 220, borderRadius: 20 }}
+                prefix={<SearchOutlined style={{ color: 'rgba(148, 163, 184, 0.8)' }} />}
+                placeholder="Quick search customers, deals (Ctrl + K)..."
+                style={{ width: 280, borderRadius: 20 }}
                 variant="filled"
               />
             </Space>
 
-            <Space size={16}>
+            <Space size={20}>
+              {/* Live Status Pill */}
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '4px 12px',
+                  borderRadius: 20,
+                  background: isDark ? 'rgba(16, 185, 129, 0.12)' : 'rgba(16, 185, 129, 0.1)',
+                  border: '1px solid rgba(16, 185, 129, 0.25)',
+                }}
+              >
+                <span className="pulse-dot" style={{ backgroundColor: '#10b981' }} />
+                <Text style={{ fontSize: 12, fontWeight: 700, color: '#10b981' }}>
+                  MSW SYNC ACTIVE
+                </Text>
+              </div>
+
               {/* Theme Toggle Button */}
               <Tooltip title={`Switch to ${isDark ? 'Light' : 'Dark'} Mode`}>
                 <Button
                   type="text"
                   shape="circle"
-                  icon={isDark ? <SunOutlined style={{ color: '#faad14' }} /> : <MoonOutlined />}
+                  icon={isDark ? <SunOutlined style={{ color: '#fbbf24', fontSize: 18 }} /> : <MoonOutlined style={{ fontSize: 18 }} />}
                   onClick={() => dispatch(toggleTheme())}
-                  style={{ fontSize: 18 }}
                 />
               </Tooltip>
 
               {/* Notifications */}
               <Tooltip title="Notifications">
                 <Badge count={3} offset={[-2, 4]} size="small">
-                  <Button type="text" shape="circle" icon={<BellOutlined />} style={{ fontSize: 18 }} />
+                  <Button type="text" shape="circle" icon={<BellOutlined style={{ fontSize: 18 }} />} />
                 </Badge>
               </Tooltip>
 
               {/* User Dropdown */}
               <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" trigger={['click']}>
-                <Space style={{ cursor: 'pointer', paddingLeft: 8 }}>
+                <Space style={{ cursor: 'pointer', paddingLeft: 4 }}>
                   <Avatar
                     src={user?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex'}
                     icon={<UserOutlined />}
-                    style={{ backgroundColor: primaryColor }}
+                    size={38}
+                    style={{
+                      backgroundColor: primaryColor,
+                      border: '2px solid rgba(255,255,255,0.2)',
+                      boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
+                    }}
                   />
-                  <div style={{ display: 'none', minWidth: 80 }}>
+                  <div style={{ display: 'none' }}>
                     <Text strong style={{ display: 'block', lineHeight: 1.2 }}>
-                      {user?.name || 'Admin'}
+                      {user?.name || 'Alex'}
                     </Text>
                   </div>
                 </Space>
@@ -298,7 +333,7 @@ export const DashboardLayout: React.FC = () => {
           {/* Main Body Content */}
           <Content
             style={{
-              margin: '24px 24px 0',
+              margin: '28px 28px 0',
               padding: 0,
               minHeight: 280,
             }}
@@ -310,12 +345,12 @@ export const DashboardLayout: React.FC = () => {
           <Layout.Footer
             style={{
               textAlign: 'center',
-              padding: '16px 24px',
-              color: isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.45)',
+              padding: '24px',
+              color: isDark ? 'rgba(255,255,255,0.45)' : 'rgba(100,116,139,0.7)',
               fontSize: 13,
             }}
           >
-            Apex CRM Dashboard ©2026 Created with Ant Design & Redux Toolkit
+            Apex CRM Enterprise Dashboard • Built with React, TypeScript & Ant Design
           </Layout.Footer>
         </Layout>
       </Layout>
