@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import {
   Layout,
@@ -16,6 +16,7 @@ import {
   Modal,
   notification,
   Tag,
+  Drawer,
 } from 'antd';
 import {
   DashboardOutlined,
@@ -31,6 +32,7 @@ import {
   BellOutlined,
   SearchOutlined,
   ThunderboltOutlined,
+  MenuOutlined,
 } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../app/store';
 import { toggleSider, toggleTheme } from './uiSlice';
@@ -44,6 +46,8 @@ export const DashboardLayout: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   const { themeMode, siderCollapsed, primaryColor } = useAppSelector((state) => state.ui);
   const { user } = useAppSelector((state) => state.auth);
@@ -80,6 +84,7 @@ export const DashboardLayout: React.FC = () => {
 
   const handleMenuClick = (info: { key: string }) => {
     navigate(info.key);
+    setMobileDrawerOpen(false);
   };
 
   const handleLogout = () => {
@@ -132,6 +137,71 @@ export const DashboardLayout: React.FC = () => {
     },
   ];
 
+  const brandLogo = (
+    <div
+      style={{
+        height: 70,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: siderCollapsed ? 'center' : 'flex-start',
+        padding: siderCollapsed ? '0' : '0 20px',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        gap: 12,
+        cursor: 'pointer',
+      }}
+      onClick={() => {
+        navigate('/dashboard');
+        setMobileDrawerOpen(false);
+      }}
+    >
+      <div
+        style={{
+          width: 40,
+          height: 40,
+          borderRadius: 12,
+          background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#fff',
+          fontSize: 22,
+          boxShadow: '0 0 20px rgba(99, 102, 241, 0.6)',
+          flexShrink: 0,
+        }}
+      >
+        <ThunderboltOutlined />
+      </div>
+      {(!siderCollapsed || mobileDrawerOpen) && (
+        <div>
+          <Text
+            style={{
+              color: '#fff',
+              fontWeight: 800,
+              fontSize: 17,
+              letterSpacing: '-0.3px',
+              display: 'block',
+              lineHeight: 1.2,
+            }}
+          >
+            APEX CRM
+          </Text>
+          <Tag
+            color="purple"
+            style={{
+              fontSize: 9,
+              fontWeight: 700,
+              margin: 0,
+              borderRadius: 4,
+              padding: '0 4px',
+            }}
+          >
+            PRO ENTERPRISE
+          </Tag>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <ConfigProvider
       theme={{
@@ -144,85 +214,23 @@ export const DashboardLayout: React.FC = () => {
       }}
     >
       <Layout style={{ minHeight: '100vh', background: isDark ? '#090d16' : '#f8fafc' }}>
+        {/* Desktop Sidebar Sider */}
         <Sider
           trigger={null}
           collapsible
           collapsed={siderCollapsed}
           breakpoint="lg"
-          onBreakpoint={(broken) => {
-            if (broken && !siderCollapsed) {
-              dispatch(toggleSider());
-            }
-          }}
+          collapsedWidth={80}
           style={{
-            background: isDark ? '#0f172a' : '#0f172a',
+            background: '#0f172a',
             borderRight: '1px solid rgba(255, 255, 255, 0.08)',
             boxShadow: '4px 0 24px rgba(0, 0, 0, 0.25)',
             zIndex: 10,
           }}
+          className="hide-on-mobile"
           width={250}
         >
-          {/* Logo Brand Header */}
-          <div
-            style={{
-              height: 70,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: siderCollapsed ? 'center' : 'flex-start',
-              padding: siderCollapsed ? '0' : '0 20px',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-              gap: 12,
-              cursor: 'pointer',
-            }}
-            onClick={() => navigate('/dashboard')}
-          >
-            <div
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 12,
-                background: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontSize: 22,
-                boxShadow: '0 0 20px rgba(99, 102, 241, 0.6)',
-              }}
-            >
-              <ThunderboltOutlined />
-            </div>
-            {!siderCollapsed && (
-              <div>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontWeight: 800,
-                    fontSize: 17,
-                    letterSpacing: '-0.3px',
-                    display: 'block',
-                    lineHeight: 1.2,
-                  }}
-                >
-                  APEX CRM
-                </Text>
-                <Tag
-                  color="purple"
-                  style={{
-                    fontSize: 9,
-                    fontWeight: 700,
-                    margin: 0,
-                    borderRadius: 4,
-                    padding: '0 4px',
-                  }}
-                >
-                  PRO ENTERPRISE
-                </Tag>
-              </div>
-            )}
-          </div>
-
-          {/* Sider Menu */}
+          {brandLogo}
           <Menu
             theme="dark"
             mode="inline"
@@ -237,12 +245,36 @@ export const DashboardLayout: React.FC = () => {
           />
         </Sider>
 
+        {/* Mobile Slide-out Drawer Menu */}
+        <Drawer
+          placement="left"
+          onClose={() => setMobileDrawerOpen(false)}
+          open={mobileDrawerOpen}
+          width={260}
+          bodyStyle={{ padding: 0, background: '#0f172a' }}
+          headerStyle={{ display: 'none' }}
+        >
+          {brandLogo}
+          <Menu
+            theme="dark"
+            mode="inline"
+            selectedKeys={[location.pathname]}
+            items={menuItems}
+            onClick={handleMenuClick}
+            style={{
+              paddingTop: 16,
+              background: 'transparent',
+              borderRight: 0,
+            }}
+          />
+        </Drawer>
+
         <Layout style={{ background: 'transparent' }}>
-          {/* Main Top Header */}
+          {/* Responsive Header */}
           <Header
             style={{
-              padding: '0 28px',
-              background: isDark ? 'rgba(15, 23, 42, 0.8)' : 'rgba(255, 255, 255, 0.85)',
+              padding: '0 20px',
+              background: isDark ? 'rgba(15, 23, 42, 0.85)' : 'rgba(255, 255, 255, 0.9)',
               backdropFilter: 'blur(16px)',
               display: 'flex',
               alignItems: 'center',
@@ -256,24 +288,37 @@ export const DashboardLayout: React.FC = () => {
               top: 0,
             }}
           >
-            <Space size={16}>
+            <Space size={12}>
+              {/* Desktop Sider Collapse Toggle */}
               <Button
                 type="text"
+                className="hide-on-mobile"
                 icon={siderCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
                 onClick={() => dispatch(toggleSider())}
                 style={{ fontSize: 18 }}
               />
+
+              {/* Mobile Menu Drawer Toggle Button */}
+              <Button
+                type="text"
+                style={{ display: 'inline-flex' }}
+                icon={<MenuOutlined style={{ fontSize: 18 }} />}
+                onClick={() => setMobileDrawerOpen(true)}
+              />
+
               <Input
                 prefix={<SearchOutlined style={{ color: 'rgba(148, 163, 184, 0.8)' }} />}
-                placeholder="Quick search customers, deals (Ctrl + K)..."
-                style={{ width: 280, borderRadius: 20 }}
+                placeholder="Search..."
+                style={{ width: 180, borderRadius: 20 }}
                 variant="filled"
+                className="hide-on-mobile"
               />
             </Space>
 
-            <Space size={20}>
+            <Space size={14}>
               {/* Live Status Pill */}
               <div
+                className="hide-on-mobile"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -286,7 +331,7 @@ export const DashboardLayout: React.FC = () => {
               >
                 <span className="pulse-dot" style={{ backgroundColor: '#10b981' }} />
                 <Text style={{ fontSize: 12, fontWeight: 700, color: '#10b981' }}>
-                  MSW SYNC ACTIVE
+                  MSW ACTIVE
                 </Text>
               </div>
 
@@ -309,31 +354,26 @@ export const DashboardLayout: React.FC = () => {
 
               {/* User Dropdown */}
               <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" trigger={['click']}>
-                <Space style={{ cursor: 'pointer', paddingLeft: 4 }}>
+                <Space style={{ cursor: 'pointer' }}>
                   <Avatar
                     src={user?.avatar || 'https://api.dicebear.com/7.x/avataaars/svg?seed=Alex'}
                     icon={<UserOutlined />}
-                    size={38}
+                    size={36}
                     style={{
                       backgroundColor: primaryColor,
                       border: '2px solid rgba(255,255,255,0.2)',
                       boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
                     }}
                   />
-                  <div style={{ display: 'none' }}>
-                    <Text strong style={{ display: 'block', lineHeight: 1.2 }}>
-                      {user?.name || 'Alex'}
-                    </Text>
-                  </div>
                 </Space>
               </Dropdown>
             </Space>
           </Header>
 
-          {/* Main Body Content */}
+          {/* Responsive Body Content */}
           <Content
             style={{
-              margin: '28px 28px 0',
+              margin: '20px 16px 0',
               padding: 0,
               minHeight: 280,
             }}
@@ -345,9 +385,9 @@ export const DashboardLayout: React.FC = () => {
           <Layout.Footer
             style={{
               textAlign: 'center',
-              padding: '24px',
+              padding: '20px 16px',
               color: isDark ? 'rgba(255,255,255,0.45)' : 'rgba(100,116,139,0.7)',
-              fontSize: 13,
+              fontSize: 12,
             }}
           >
             Apex CRM Enterprise Dashboard • Built with React, TypeScript & Ant Design

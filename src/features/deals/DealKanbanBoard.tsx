@@ -64,14 +64,7 @@ export const DealKanbanBoard: React.FC<DealKanbanBoardProps> = ({
   }
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-        gap: 18,
-        alignItems: 'start',
-      }}
-    >
+    <div className="kanban-scroll-container">
       {STAGES.map((stageInfo, colIdx) => {
         const stageDeals = deals.filter((d) => d.stage === stageInfo.key);
         const colTotalValue = stageDeals.reduce((acc, d) => acc + d.value, 0);
@@ -79,6 +72,7 @@ export const DealKanbanBoard: React.FC<DealKanbanBoardProps> = ({
         return (
           <div
             key={stageInfo.key}
+            className="kanban-column-wrapper"
             style={{
               background: 'rgba(255, 255, 255, 0.03)',
               backdropFilter: 'blur(12px)',

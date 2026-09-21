@@ -107,7 +107,7 @@ export const DealFormModal: React.FC<DealFormModalProps> = ({
       onCancel={onClose}
       confirmLoading={isSubmitting}
       okText={isEditing ? 'Save Deal' : 'Create Deal'}
-      width={560}
+      width={window.innerWidth < 576 ? '95%' : 560}
       destroyOnClose
     >
       <Form form={form} layout="vertical" style={{ marginTop: 16 }}>

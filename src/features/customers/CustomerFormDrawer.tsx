@@ -91,7 +91,7 @@ export const CustomerFormDrawer: React.FC<CustomerFormDrawerProps> = ({
   return (
     <Drawer
       title={isEditing ? `Edit Customer: ${customerToEdit?.name}` : 'Create New Customer'}
-      width={480}
+      width={window.innerWidth < 576 ? '100%' : 480}
       onClose={onClose}
       open={open}
       destroyOnClose
