@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+  <defs>
+    <linearGradient id="apexGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1677ff" />
+      <stop offset="100%" stop-color="#722ed1" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#722ed1" flood-opacity="0.3" />
+    </filter>
+  </defs>
+  <!-- Background Rounded Shield / Badge -->
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#apexGrad)" filter="url(#shadow)" />
+  
+  <!-- Rocket / Growth Peak Icon -->
+  <g fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Main Launch Core -->
+    <path d="M32 14 C38 22, 42 30, 42 42 L22 42 C22 30, 26 22, 32 14 Z" fill="#ffffff" fill-opacity="0.2" />
+    <path d="M32 14 C38 22, 42 30, 42 42 L22 42 C22 30, 26 22, 32 14 Z" />
+    <!-- Center Thrust Line -->
+    <path d="M32 26 L32 38" />
+    <!-- Left Wing -->
+    <path d="M22 34 L16 42 L22 42" />
+    <!-- Right Wing -->
+    <path d="M42 34 L48 42 L42 42" />
+    <!-- Exhaust Spark -->
+    <circle cx="32" cy="48" r="2" fill="#ffd666" stroke="none" />
+  </g>
+</svg>
